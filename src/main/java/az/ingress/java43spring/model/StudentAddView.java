@@ -8,8 +8,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class StudentAddView {
 
-    Integer id;
-    String name;
-    String surname;
-    String fullName;
+    String ad;
+    String soyad;
+    String ata;
+    Integer bal;
 }

@@ -5,12 +5,8 @@ public class Student {
     private Integer id;
     private String name;
     private String surname;
-
-    public Student(Integer id, String name, String surname){
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-    }
+    private String fatherName;
+    private Integer grade;
 
     public Integer getId() {
         return id;
@@ -36,12 +32,19 @@ public class Student {
         this.surname = surname;
     }
 
-    @Override
-    public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                '}';
+    public String getFatherName() {
+        return fatherName;
+    }
+
+    public void setFatherName(String fatherName) {
+        this.fatherName = fatherName;
+    }
+
+    public Integer getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Integer grade) {
+        this.grade = grade;
     }
 }

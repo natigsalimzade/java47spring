@@ -1,6 +1,7 @@
 package az.ingress.java43spring.service;
 
 import az.ingress.java43spring.dao.StudentDao;
+import az.ingress.java43spring.mapper.StudentMapper;
 import az.ingress.java43spring.model.Student;
 import az.ingress.java43spring.model.StudentAddView;
 import az.ingress.java43spring.model.StudentView;
@@ -28,28 +29,24 @@ import java.util.List;
 public class StudentService {
 
     StudentDao studentDao;
+    StudentMapper studentMapper;
 
     public List<Student> getStudentList(){
         return studentDao.getStudentList();
     }
 
-    public StudentView getStudent(Integer id,
-                                  String name,
-                                  String surname){
-        Student student = studentDao.getStudent(id, name, surname);
-        return new StudentView(student.getId(), student.getName() + " " + student.getSurname());
+    public StudentView getStudent(Integer id){
+        Student student = studentDao.getStudentById(id);
+        return studentMapper.toStudentView(student);
     }
 
-    public StudentAddView add(Student student){
-        Student student1 = studentDao.add(student);
-        return new StudentAddView(student1.getId(),
-                student1.getName(),
-                student1.getSurname(),
-                student1.getName() + " " + student1.getSurname());
+    public void add(StudentAddView studentAddView){
+        Student student = studentMapper.toStudent(studentAddView);
+        studentDao.add(student);
     }
 
-    public Student update(Student student){
-        return studentDao.update(student);
+    public void update(Student student){
+        studentDao.update(student);
     }
 
     public void delete(Integer id){

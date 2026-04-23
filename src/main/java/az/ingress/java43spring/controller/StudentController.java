@@ -36,21 +36,19 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public StudentView getStudent(@PathVariable Integer id,
-                                  @RequestParam String name,
-                                  @RequestParam(required = false) String surname){
-        return studentService.getStudent(id, name, surname);
+    public StudentView getStudent(@PathVariable Integer id){
+        return studentService.getStudent(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public StudentAddView add(@RequestBody Student student){
-        return studentService.add(student);
+    public void add(@RequestBody StudentAddView studentAddView){
+        studentService.add(studentAddView);
     }
 
     @PutMapping
-    public Student update(@RequestBody Student student){
-        return studentService.update(student);
+    public void update(@RequestBody Student student){
+        studentService.update(student);
     }
 
     @DeleteMapping("/{id}")

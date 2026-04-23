@@ -9,5 +9,9 @@ import lombok.experimental.FieldDefaults;
 public class StudentView {
 
     Integer id;
+    String name;
+    String lastname;
+    String patronymic;
+    Integer grade;
     String fullName;
 }
