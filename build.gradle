@@ -32,6 +32,8 @@ dependencies {
 	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.3.0'
 	implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '3.1.2'
+
 }
 
 tasks.named('test') {
