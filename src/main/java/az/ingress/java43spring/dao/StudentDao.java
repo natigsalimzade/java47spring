@@ -4,9 +4,14 @@ import az.ingress.java43spring.model.Student;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.processing.SQL;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,35 +23,26 @@ public class StudentDao {
 
     NamedParameterJdbcTemplate jdbcTemplate;
 
-    public List<Student> getStudentList(){
-        return jdbcTemplate.query(SQLQueries.SELECT_STUDENTS_LIST,
-                new MapSqlParameterSource(),
-                new BeanPropertyRowMapper<>(Student.class));
+    public List<Student> getAll(){
+        return jdbcTemplate.query(SQLQueries.SELECT_STUDENTS,
+                new MapSqlParameterSource(), new BeanPropertyRowMapper<>(Student.class));
     }
 
-    public Student getStudentById(Integer id){
+    public Student getById(Integer id, String name, String surname){
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", id);
+        params.addValue("name", name);
+        params.addValue("surname", surname);
         return jdbcTemplate.queryForObject(SQLQueries.SELECT_STUDENT_BY_ID,
-                new MapSqlParameterSource("id", id),
-                new BeanPropertyRowMapper<>(Student.class));
+                params, new BeanPropertyRowMapper<>(Student.class));
     }
 
     public void add(Student student){
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("name", student.getName());
-        params.addValue("surname", student.getSurname());
-        params.addValue("fatherName", student.getFatherName());
-        params.addValue("grade", student.getGrade());
-        jdbcTemplate.update(SQLQueries.INSERT_STUDENT, params);
+        jdbcTemplate.update(SQLQueries.INSERT_STUDENT, new BeanPropertySqlParameterSource(student));
     }
 
     public void update(Student student){
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("id", student.getId());
-        params.addValue("name", student.getName());
-        params.addValue("surname", student.getSurname());
-        params.addValue("fatherName", student.getFatherName());
-        params.addValue("grade", student.getGrade());
-        jdbcTemplate.update(SQLQueries.UPDATE_STUDENT, params);
+        jdbcTemplate.update(SQLQueries.UPDATE_STUDENT, new BeanPropertySqlParameterSource(student));
     }
 
     public void delete(Integer id){

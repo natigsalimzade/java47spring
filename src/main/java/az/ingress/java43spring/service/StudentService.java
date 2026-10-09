@@ -1,25 +1,15 @@
 package az.ingress.java43spring.service;
 
 import az.ingress.java43spring.dao.StudentDao;
-import az.ingress.java43spring.mapper.StudentMapper;
+import az.ingress.java43spring.exception.NoPermissionException;
+import az.ingress.java43spring.exception.StudentNotFoundException;
 import az.ingress.java43spring.model.Student;
-import az.ingress.java43spring.model.StudentAddView;
-import az.ingress.java43spring.model.StudentView;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
 import java.util.List;
 
 @Service
@@ -29,19 +19,21 @@ import java.util.List;
 public class StudentService {
 
     StudentDao studentDao;
-    StudentMapper studentMapper;
 
-    public List<Student> getStudentList(){
-        return studentDao.getStudentList();
+    public List<Student> getAll(){
+        return studentDao.getAll();
     }
 
-    public StudentView getStudent(Integer id){
-        Student student = studentDao.getStudentById(id);
-        return studentMapper.toStudentView(student);
+    public Student getById(Integer id, String name, String surname){
+
+        try {
+            return studentDao.getById(id, name, surname);
+        } catch (EmptyResultDataAccessException e) {
+            throw new StudentNotFoundException("Student not found");
+        }
     }
 
-    public void add(StudentAddView studentAddView){
-        Student student = studentMapper.toStudent(studentAddView);
+    public void add(Student student){
         studentDao.add(student);
     }
 
@@ -51,6 +43,6 @@ public class StudentService {
 
     public void delete(Integer id){
         studentDao.delete(id);
-        log.info("Record was deleted with id = {}", id);
+        log.info("Record deleted id = {}", id);
     }
 }

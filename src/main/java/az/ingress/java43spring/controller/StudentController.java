@@ -1,13 +1,12 @@
 package az.ingress.java43spring.controller;
 
 import az.ingress.java43spring.model.Student;
-import az.ingress.java43spring.model.StudentAddView;
-import az.ingress.java43spring.model.StudentView;
 import az.ingress.java43spring.service.StudentService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/students")
+@RequestMapping("/students")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class StudentController {
@@ -31,19 +30,21 @@ public class StudentController {
     StudentService studentService;
 
     @GetMapping
-    public List<Student> getStudentList(){
-        return studentService.getStudentList();
+    public List<Student> getAll(){
+        return studentService.getAll();
     }
 
     @GetMapping("/{id}")
-    public StudentView getStudent(@PathVariable Integer id){
-        return studentService.getStudent(id);
+    public Student getById(@PathVariable Integer id,
+                           @RequestParam(required = false) String name,
+                           @RequestParam(required = false) String surname){
+        return studentService.getById(id, name, surname);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void add(@RequestBody StudentAddView studentAddView){
-        studentService.add(studentAddView);
+    public void add(@RequestBody Student student){
+        studentService.add(student);
     }
 
     @PutMapping
