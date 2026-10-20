@@ -31,7 +31,7 @@ public class City {
 
     String name;
 
-    @OneToMany(mappedBy = "city", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "city", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
     List<Customer> customers;
 }

@@ -50,6 +50,8 @@ public class CityService {
         return cityMapper.toCityDtoList(cityRepository.findAllByCustomerNameJpql(customerName));
     }
 
+    // Mapper customers-e transaction daxilinde muraciet edir -> LazyInitializationException olmur
+    @Transactional(readOnly = true)
     public List<CityDto> findAllByNameNative(String name){
         return cityMapper.toCityDtoList(cityRepository.findAllByNameNative(name));
     }

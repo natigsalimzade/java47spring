@@ -20,12 +20,12 @@ public class FeignTestController {
     TestClient testClient;
 
     @GetMapping
-    public String test(@RequestParam(defaultValue = "World") String name){
+    public String test(@RequestParam(required = false) String name){
         return testClient.test(name);
     }
 
     @PostMapping
-    public String echo(@RequestBody String body){
-        return testClient.echo(body);
+    public String echo(){
+        return testClient.echo();
     }
 }

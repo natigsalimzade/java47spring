@@ -13,12 +13,12 @@ import java.util.Optional;
 
 @Repository
 public interface CityRepository extends JpaRepository<City, Integer> {
-//
-//    @EntityGraph(attributePaths = {"customers"})
-//    Optional<City> findById(Integer id);
-//
-//    @EntityGraph(value = "city-customers")
-//    List<City> findAll();
+
+    @EntityGraph(attributePaths = {"customers"})
+    Optional<City> findById(Integer id);
+
+    @EntityGraph(value = "city-customers")
+    List<City> findAll();
 
     // ---------- JPQL ----------
 
@@ -29,13 +29,15 @@ public interface CityRepository extends JpaRepository<City, Integer> {
     @Query("SELECT c FROM City c LEFT JOIN FETCH c.customers WHERE c.id = :id")
     Optional<City> findByIdWithCustomersJpql(@Param("id") Integer id);
 
-    // FETCH olmadan sade JOIN: customers yene LAZY qalir
+    // FETCH olmadan sade JOIN: customers yene LAZY qalir. LAZY qaldirmaq ucun EntityGraph elave et.
+    @EntityGraph(attributePaths = {"customers"})
     @Query("SELECT DISTINCT c FROM City c JOIN c.customers cu WHERE cu.name = :customerName")
     List<City> findAllByCustomerNameJpql(@Param("customerName") String customerName);
 
     // ---------- Native SQL ----------
 
-    // Native query City entity qaytarir, amma customers collection-i LAZY qalir
+    // Native query City entity qaytarir, amma customers collection-i LAZY qalir.
+    // Native query-de @EntityGraph ve JOIN customers-i doldurmur -> service-de @Transactional lazimdir.
     @Query(value = "SELECT * FROM cities WHERE name = :name", nativeQuery = true)
     List<City> findAllByNameNative(@Param("name") String name);
 
