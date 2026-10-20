@@ -32,4 +32,14 @@ public class GlobalExceptionHandler {
         response.put("timestamp", LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNotFound(CustomerNotFoundException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("error", "Not Found");
+        response.put("message", ex.getMessage());
+        response.put("status", HttpStatus.NOT_FOUND.value());
+        response.put("timestamp", LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 }

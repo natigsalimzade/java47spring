@@ -1,26 +1,23 @@
 package az.ingress.java43spring;
 
-
-import az.ingress.java43spring.configuration.MyConfig;
-import az.ingress.java43spring.model.Student;
-import az.ingress.java43spring.model.User;
+import az.ingress.java43spring.exception.CustomerNotFoundException;
+import az.ingress.java43spring.model.entity.Customer;
+import az.ingress.java43spring.repository.CustomerRepository;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
+@EnableFeignClients
 @Slf4j
+@RequiredArgsConstructor
 public class Java43springApplication implements CommandLineRunner {
 
-
+    private final CustomerRepository customerRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(Java43springApplication.class, args);
@@ -30,26 +27,21 @@ public class Java43springApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+//        Customer customer = customerRepository.findById(6).orElseThrow(CustomerNotFoundException::new);
+//
+//        log.info("customer = {}", customer);
+//        log.info("cityName = {}", customer.getCity().getName());
 
-//        String url = "jdbc:mysql://localhost:3306/java51";
-//        String name = "Sema";
-//        String surname = "' or '1'='1";
+//        Customer customer = new Customer();
+//        customer.setName("Khurrami");
+//        customer.setSurname("Abbaszade");
+//        customer.setFatherName("Elnur");
+//        customer.setAddress("Baku");
+//        customer.setCityId(3);
 //
-//        try (Connection conn = DriverManager.getConnection(url, "root", "password");
-//             Statement st = conn.createStatement()) {
+//        customerRepository.save(customer);
 //
-//            String sql = "SELECT * FROM students WHERE name = '" + name
-//                    + "' AND surname = '" + surname + "'";
-//
-//            System.out.println("İcra olunan sorğu: " + sql);
-//
-//            try (ResultSet rs = st.executeQuery(sql)) {
-//                if (rs.next()) {
-//                    System.out.println("Xoş gəldin, " + rs.getString("salary") + "!");
-//                } else {
-//                    System.out.println("Ad və ya soyad səhvdir.");
-//                }
-//            }
-//        }
+//        customer.setAddress("California");
+
     }
 }
