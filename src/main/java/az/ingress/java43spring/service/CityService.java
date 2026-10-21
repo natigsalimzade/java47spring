@@ -13,7 +13,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class CityService {
     CityRepository cityRepository;
     CustomerRepository customerRepository;
     CityMapper cityMapper;
+    PlatformTransactionManager transactionManager;
 
     public City findById(Integer id){
         City city = cityRepository.findById(id).orElseThrow(NullPointerException::new);
@@ -75,6 +79,25 @@ public class CityService {
     public void saveWithRuntimeException(String cityName){
         saveCityWithCustomer(cityName);
         throw new RuntimeException("RuntimeException -> rollback");
+    }
+
+    // 2.1) @Transactional proxy-nin arxada etdiyi isin manual (programmatic) versiyasi.
+    //      saveWithRuntimeException() ile eyni neticeni verir -> ROLLBACK.
+    //      Spring proxy metodu bele "baglayir": begin -> metod -> commit / rollback
+    public void saveWithRuntimeExceptionProxy(String cityName){
+        // proxy: transaction-i baslat (repository.save()-ler bu transaction-a qosulur)
+        TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+        try {
+            // proxy: esl metodu cagir
+            saveCityWithCustomer(cityName);
+            if (true) throw new RuntimeException("RuntimeException -> rollback");
+            // proxy: exception yoxdursa -> commit
+            transactionManager.commit(status);
+        } catch (RuntimeException e) {
+            // proxy: RuntimeException -> rollback ve exception-i yuxari otur
+            transactionManager.rollback(status);
+            throw e;
+        }
     }
 
     // 3) Checked exception -> default olaraq rollback YOXDUR, COMMIT olunur!
