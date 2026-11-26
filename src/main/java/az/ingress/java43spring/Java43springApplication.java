@@ -31,7 +31,6 @@ public class Java43springApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
         //test Amil
         //test Amil messag 2
         //test Mahammad
