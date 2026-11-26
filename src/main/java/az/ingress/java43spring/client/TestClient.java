@@ -16,6 +16,4 @@ public interface TestClient {
     @PostMapping(value = "/test", consumes = MediaType.TEXT_PLAIN_VALUE)
     String echo();
 
-    // test Rufat
-
 }
