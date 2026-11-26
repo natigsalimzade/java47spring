@@ -31,15 +31,5 @@ public class Java43springApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
-        // test message
-        // test message vol2
-        // test message vol3
-        // test message vol4
-        // test message vol5
-        // test message vol7
-        // test message vol8
-        // test message vol10
-        // test message vol9
     }
 }
