@@ -1,5 +1,4 @@
 HELP.md
-test_git.txt
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
